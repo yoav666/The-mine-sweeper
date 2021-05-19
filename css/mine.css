@@ -1,0 +1,59 @@
+*{
+    box-sizing: border-box;
+}
+
+.header{
+    width: 100%;
+    height: 200px;
+    display: flex;
+}
+.continer-header1{
+    width: 25%;
+    height: 100%;
+    background-color: red;
+}
+.continer-header2{
+    width: 50%;
+    height: 100%;
+    background-color: greenyellow;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.four{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background-color:hotpink;
+    font-size: 20px;
+    
+}
+.continer-header3{
+    width: 25%;
+    height: 100%;
+    background-color: red;
+}
+.board-out{
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cell{
+    text-align: center;
+    width: 60px;
+    height: 60px;
+    background-color: turquoise;
+}
+.touch{
+    background-color: violet;
+}
+.bomb{
+    background-color: red;
+}
+.flag{
+    background-color: indigo;
+}

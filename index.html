@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE MINES SWEEPER</title>
+    <link rel="stylesheet" href="css/mine.css">
+</head>
+
+<body onload="initGame()">
+    <div class="header">
+        <div class="continer-header1">
+            <div class="stop-watch">
+                <h3 class="timing">00:00:00</h3>
+                <div class="lives">lives:<span></span></div>
+            </div>
+        </div>
+        <div class="continer-header2">
+            <div onclick="restartGame(4)" class="size four">4</div>
+            <div onclick="restartGame(8)" class="size four">8</div>
+            <div onclick="restartGame(12)" class="size four">12</div>
+        </div>
+        <div class="continer-header3"></div>
+    </div>
+    <div class="modal-out">
+        <div class="modal"></div>
+    </div>
+    <div class="board-out">
+        <table>
+            <tbody class="board"></tbody>
+        </table>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
