@@ -4,7 +4,7 @@
 
 .header{
     width: 100%;
-    height: 200px;
+    height: 100px;
     display: flex;
 }
 .continer-header1{
@@ -35,8 +35,35 @@
     height: 100%;
     background-color: red;
 }
-.board-out{
+.continer-modal{
+    height: 200px;
+    background-color: lightyellow;
+}
+.modal-out{
+    /* position: absolute; */
+    display: none;
+    justify-content: center;
+    align-items: center;
     margin-top: 50px;
+    /* background-color: lightcoral; */
+}
+.modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: lightseagreen;
+    width: 150px;
+    height: 150px;
+    font-size: 30px;
+}
+
+
+.board-out{
+    /* width: 600px;
+    height: 600px;
+    background-color: lightskyblue; */
+    margin: 50px;
+    /* position: absolute; */
     display: flex;
     justify-content: center;
     align-items: center;

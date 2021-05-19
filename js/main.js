@@ -10,10 +10,11 @@ var milsecounds = 0;
 var secounds = 0;
 var minutes = 0;
 var gBoard;
-var gGameOver = false;
+var gIsVictory = false
+var gIsGameOver = false;
 var gLevel = {
     SIZE: 8,
-    MINES: 8,
+    MINES: 12,
     LIVES: 3
 };
 var gGame = {
@@ -26,28 +27,35 @@ var gGame = {
 
 function initGame() {
     clearInterval(gIntervalTime)
-    gGame.isOn=false
-    gGameOver=false
+    gGame = {
+        isOn: false,
+        shownCount: 0,
+        markedCount: 0,
+        secsPassed: 0
+    };
+    gIsGameOver = false
+    gIsVictory = false
+    closeModal()
     gBoard = buildBoard()
     renderBoard(gBoard)
     renderLives()
     milsecounds = 0;
     secounds = 0;
     minutes = 0;
-    
+
 }
 
-function restartGame(size){
-    gLevel.SIZE=size
-    if (size===4){
-        gLevel.MINES=2
-        gLevel.LIVES=1
-    }else if(size===12){
-        gLevel.MINES=30
-        gLevel.LIVES=3
-    }else{
-        gLevel.MINES=12
-        gLevel.LIVES=3
+function restartGame(size) {
+    gLevel.SIZE = size
+    if (size === 4) {
+        gLevel.MINES = 2
+        gLevel.LIVES = 1
+    } else if (size === 12) {
+        gLevel.MINES = 30
+        gLevel.LIVES = 3
+    } else {
+        gLevel.MINES = 12
+        gLevel.LIVES = 3
     }
     initGame()
 }
@@ -71,14 +79,14 @@ function setMinesRandom(locationI, locationJ, board) {
     var emptyLocations = getAllEmptyLocations(locationI, locationJ, board)
     for (var i = 0; i < gLevel.MINES; i++) {
         var emptyLocation = emptyLocations[getRandomIntInclusive(0, emptyLocations.length - 1)]
-        console.log(emptyLocation)
+        // console.log(emptyLocation)
         board[emptyLocation.i][emptyLocation.j].isMine = true
         board[emptyLocation.i][emptyLocation.j].minesAroundCount = 'mine'
         var emptyIndex = emptyLocations.indexOf(emptyLocation)
         emptyLocations.splice(emptyIndex, 1)
 
     }
-    console.log(board)
+    // console.log(board)
 }
 
 function getAllEmptyLocations(locationI, locationJ, board) {
@@ -93,7 +101,7 @@ function getAllEmptyLocations(locationI, locationJ, board) {
             }
         }
     }
-    console.log(emptyLocations)
+    // console.log(emptyLocations)
     return emptyLocations
 }
 function setMinesNegsCount(board) {
@@ -129,7 +137,7 @@ function renderBoard(board) {
             var className = `cell-${i}-${j}`
             if (cell.isMarked) {
                 cell = FLAG
-                className+=' flag'
+                className += ' flag'
             } else if (cell.isShown) {
                 if (cell.isMine) {
                     cell = MINE
@@ -149,7 +157,7 @@ function renderBoard(board) {
             }
             strHTML += `<td class="cell ${className}" 
         onclick="cellClicked(${i},${j},this)" 
-        oncontextmenu=cellMarked(this,${i},${j})>${cell}</td>`
+        oncontextmenu="cellMarked(this,${i},${j})">${cell}</td>`
         }
         strHTML += '</tr>'
     }
@@ -157,10 +165,11 @@ function renderBoard(board) {
     elBoard.innerHTML = strHTML
 }
 function firstmove(i, j, board) {
-    gIntervalTime=setInterval(stopwatch,10)
+    gIntervalTime = setInterval(stopwatch, 10)
     gGame.isOn = true
     var cell = gBoard[i][j]
     cell.isShown = true
+    gGame.shownCount++
     setMinesRandom(i, j, board)
     setMinesNegsCount(gBoard)
     if (cell.minesAroundCount === 0) {
@@ -172,73 +181,97 @@ function cellClicked(i, j, elCell) {
     if (!gGame.isOn) {
         firstmove(i, j, gBoard)
     }
-    if (gGameOver) return
+    if (gIsGameOver) return
     var cell = gBoard[i][j]
     if (cell.isShown) return
     if (cell.isMarked) return
     if (cell.minesAroundCount === 0) {
-        // console.log(elCell)
-        // elCell.innerText = EMPTY
         expandShown(i, j, gBoard)
-        // return
-    }
-    // gBoard[i][j].isShown = true
-
-    if (cell.isMine) {
+    } else if (cell.isMine) {
         cell.isShown = true
+        gGame.shownCount++
         elCell.innerText = MINE
         elCell.classList.add('bomb')
         gLevel.LIVES--
-        console.log(gLevel.LIVES)
+        // console.log(gLevel.LIVES)
         renderLives()
         checkGameOver()
-        // renderCell({i,j},MINE)
     } else {
-        if (cell.minesAroundCount===0){
-            // console.log('its a zero')
-            elCell.innerText=EMPTY
+        if (cell.minesAroundCount === 0) {
+            if (cell.isShown) return
+            cell.isShown = true
+            gGame.shownCount++
+            elCell.innerText = EMPTY
             elCell.classList.add('touch')
-        }else{
-            // console.log('hi its not a zero')
+        } else {
+            if (cell.isShown) return
+            cell.isShown = true
+            gGame.shownCount++
             elCell.innerText = cell.minesAroundCount
             elCell.classList.add('touch')
         }
-        // renderCell({i,j},cell.minesAroundCount)
     }
+    checkVictory()
+}
+
+document.oncontextmenu = rightClick;
+function rightClick(clickEvent) {
+    clickEvent.preventDefault();
+    return false;
 }
 function cellMarked(elCell, i, j) {
-    if (gGameOver) return
+    if (gIsGameOver) return
     var cell = gBoard[i][j]
     if (cell.isShown) return
     if (!cell.isMarked) {
         cell.isMarked = true
         elCell.innerText = FLAG
         elCell.classList.add('flag')
-        // renderCell({ i, j }, FLAG)
         gGame.markedCount++
     } else {
         cell.isMarked = false
         elCell.innerText = EMPTY
         elCell.classList.remove('flag')
-        // renderCell({ i, j }, EMPTY)
         gGame.markedCount--
-        // renderBoard(gBoard)
     }
-    // console.log(gGame.markedCount)
-    // renderCell(elCell,FLAG)
+    checkVictory()
 
 }
+function checkVictory() {
+    var totalSize = gLevel.SIZE ** 2
+    // console.log(gGame.shownCount)
+    // console.log(gGame.markedCount)
+    if (gGame.markedCount > gLevel.MINES) return
+    if ((gGame.shownCount) + (gGame.markedCount) === totalSize) {
+        clearInterval(gIntervalTime)
+        console.log('victory')
+        gIsVictory = true
+        openModal(gIsVictory)
+    }
+}
+
 function checkGameOver() {
-    console.log(gLevel.LIVES)
+    // console.log(gLevel.LIVES)
     if (gLevel.LIVES === 0) {
         console.log('gameover')
-        gGameOver = true
+        gIsGameOver = true
+        openModal(gIsGameOver)
         gameOver()
 
     }
 }
+function openModal(value) {
+    var elModal = document.querySelector('.modal')
+    elModal.innerText = (value === gIsVictory) ? 'Victory' : 'Game-Over'
+    var elModalOut = document.querySelector('.modal-out')
+    elModalOut.style.display = 'flex'
+}
+function closeModal(){
+    var elModalOut = document.querySelector('.modal-out')
+    elModalOut.style.display = 'none'
+
+}
 function gameOver() {
-    // var victories=[]
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard[0].length; j++) {
             var cell = gBoard[i][j]
@@ -251,24 +284,23 @@ function gameOver() {
     clearInterval(gIntervalTime)
 }
 function expandShown(cellI, cellJ, board) {
-    // console.log(cellI, cellJ)
-    // renderCell({ i: cellI, j: cellJ }, EMPTY)
     for (var i = cellI - 1; i <= cellI + 1; i++) {
-        if (i < 0 || i >= board.length) continue
+        if (i < 0 || i > board.length - 1) continue
         for (var j = cellJ - 1; j <= cellJ + 1; j++) {
-            if (j < 0 || j >= board[0].length) continue
+            if (j < 0 || j > board[0].length - 1) continue
             if (i === cellI && j === cellJ) continue
             var cell = board[i][j]
             if (!cell.isShown) {
                 if (cell.minesAroundCount === 0) {
                     if (cell.isMarked) continue
                     cell.isShown = true
-                    // renderCell({ i: i, j: j }, cell.minesAroundCount)
+                    gGame.shownCount++
                     renderCell({ i: i, j: j }, EMPTY)
                     expandShown(i, j, gBoard)
                 } else {
                     if (cell.isMarked) continue
                     cell.isShown = true
+                    gGame.shownCount++
                     renderCell({ i, j }, cell.minesAroundCount)
                 }
             }
@@ -292,9 +324,9 @@ function stopwatch() {
         secounds = 0;
         minutes++;
     }
-   var displayMilsecounds = (milsecounds < 10) ? '0' + milsecounds.toString() : milsecounds;
-   var displaySecounds = (secounds < 10) ? '0' + secounds.toString() : secounds;
-   var displayMinutes = (minutes < 10) ? '0' + minutes.toString() : minutes;
+    var displayMilsecounds = (milsecounds < 10) ? '0' + milsecounds.toString() : milsecounds;
+    var displaySecounds = (secounds < 10) ? '0' + secounds.toString() : secounds;
+    var displayMinutes = (minutes < 10) ? '0' + minutes.toString() : minutes;
     document.querySelector('.timing').innerText = displayMinutes + ":" + displaySecounds + ":" + displayMilsecounds;
 }
 
@@ -321,10 +353,10 @@ function getRandomIntInclusive(min, max) {
 function renderCell(location, value) {
     var cellSelector = '.' + getClassName(location)
     var elCell = document.querySelector(cellSelector);
-    if (gGameOver) {
-        if (elCell.classList.contains('touch')){
+    if (gIsGameOver) {
+        if (elCell.classList.contains('touch')) {
             elCell.classList.remove('touch')
-        }else {
+        } else {
             elCell.classList.remove('flag')
         }
         elCell.classList.add('bomb')
