@@ -13,20 +13,21 @@ const SAFECLICK = '✔'
 
 document.oncontextmenu = rightClick;///need to make it better
 // var gisMarkedGoodOrBad = false
+var gMoves = []
 var gSumTime = 0
 var milsecounds = 0;
 var secounds = 0;
 var minutes = 0;
-
+var gCountMinesManual = 0;
 var gIntervalTime = null
 var gIntervalSafeClick = null
-
 var gBoard;
+var gIsManual = false
 var gIsHintOn = false
 var gIsVictory = false
 var gIsGameOver = false;
 var gLevel = {
-    SIZE: 8,
+    SIZE: { ROWS: 8, COLS: 8 },
     MINES: 12,
     LIVES: 3,
     HINTS: 3,
@@ -41,13 +42,17 @@ var gGame = {
 
 firstBestTimeRender()
 function firstBestTimeRender() {
-    gLevel.SIZE = 4
+    gLevel.SIZE.ROWS = 4
+    gLevel.SIZE.COLS = 4
     renderBestTimes()
-    gLevel.SIZE = 8
+    gLevel.SIZE.ROWS = 8
+    gLevel.SIZE.COLS = 8
     renderBestTimes()
-    gLevel.SIZE = 12
+    gLevel.SIZE.ROWS = 12
+    gLevel.SIZE.COLS = 12
     renderBestTimes()
-    gLevel.SIZE = 8
+    gLevel.SIZE.ROWS = 8
+    gLevel.SIZE.COLS = 8
 }
 
 function initGame() {
@@ -76,31 +81,77 @@ function initGame() {
 }
 
 
-function restartGame(size) {
-    gLevel.SIZE = size
-    if (size === 4) {
+function restartGame(sizeRows, sizeCols) {
+    var elMinesManualMsgOut = document.querySelector('.manual-msg-out');
+    var elMinesManualMsg = document.querySelector('.manual-msg');
+    gLevel.SIZE.ROWS = sizeRows
+    gLevel.SIZE.COLS = sizeCols
+    if (sizeRows === 4 && sizeCols === 4) {
+        elMinesManualMsgOut.style.display = 'none';
         gLevel.MINES = 2
-        gLevel.LIVES = 1//1
-        gLevel.HINTS = 1//1
-        gLevel.SAFECLICKS = 1//1
-    } else if (size === 12) {
+        gLevel.LIVES = 1
+        gLevel.HINTS = 1
+        gLevel.SAFECLICKS = 1
+    } else if (sizeRows === 12 && sizeCols === 12) {
+        elMinesManualMsgOut.style.display = 'none';
         gLevel.MINES = 30
         gLevel.LIVES = 3
         gLevel.HINTS = 3
         gLevel.SAFECLICKS = 3
-    } else {
+    } else if (sizeRows === 8 && sizeCols === 8) {
+        elMinesManualMsgOut.style.display = 'none';
         gLevel.MINES = 12
+        gLevel.LIVES = 3
+        gLevel.HINTS = 3
+        gLevel.SAFECLICKS = 3
+    } else if (sizeRows === -1 && sizeCols === -1) {
+        gLevel.SIZE.ROWS = +prompt('rows?')
+        gLevel.SIZE.COLS = +prompt('cols?')
+        gLevel.MINES = +prompt('mines ?')
+        gLevel.LIVES = 3
+        gLevel.HINTS = 3
+        gLevel.SAFECLICKS = 3
+        gCountMinesManual = gLevel.MINES
+        gIsManual = true
+        minutes = 0
+        secounds = 0
+        milsecounds = 0
+        elMinesManualMsgOut.style.display = 'flex';
+        elMinesManualMsg.innerText = 'PLACE THE MINES'
+    } else {
+        elMinesManualMsgOut.style.display = 'flex';
+        elMinesManualMsg.innerText = 'NOW IS RANDOM'
         gLevel.LIVES = 3
         gLevel.HINTS = 3
         gLevel.SAFECLICKS = 3
     }
     initGame()
 }
+function placeMines(i, j, elCell) {
+    var cell = gBoard[i][j]
+    if (cell.isMine) {
+        return
+    }
+    cell.isMine = true;
+    elCell.innerText = MINE
+    elCell.classList.add('bomb')
+    setTimeout(function () {
+        elCell.innerText = EMPTY
+        elCell.classList.remove('bomb')
+    }, 300)
+    gCountMinesManual--
+    gIsManual = true
+    if (gCountMinesManual === 0) {
+        gIsManual = false
+        gGame.isOn = true
+        setMinesNegsCount(gBoard)
+    }
+}
 function buildBoard() {
     var board = []
-    for (var i = 0; i < gLevel.SIZE; i++) {
+    for (var i = 0; i < gLevel.SIZE.ROWS; i++) {
         board[i] = []
-        for (var j = 0; j < gLevel.SIZE; j++) {
+        for (var j = 0; j < gLevel.SIZE.COLS; j++) {
             var cell = {
                 minesAroundCount: null,
                 isShown: false,
@@ -166,31 +217,10 @@ function renderBoard(board) {
     for (var i = 0; i < board.length; i++) {
         strHTML += '<tr>'
         for (var j = 0; j < board[0].length; j++) {
-            // var cell = board[i][j]
             var className = `cell-${i}-${j}`
-            // if (cell.isMarked) {
-            //     cell = FLAG
-            //     className += ' flag'
-            // } else if (cell.isShown) {
-            //     if (cell.isMine) {
-            //         cell = MINE
-            //         className += ' bomb'
-            //     } else {
-            //         if (cell.minesAroundCount === 0) {
-            //             cell = EMPTY
-            //             className += ' touch'
-            //         } else {
-            //             cell = cell.minesAroundCount
-            //             className += ' touch'
-            //         }
-            //     }
-            // }
-            // else {
-            // cell = EMPTY
-            // }
             strHTML += `<td class="cell ${className}" 
         onclick="cellClicked(${i},${j},this)" 
-        oncontextmenu="cellMarked(this,${i},${j})"></td>`//${cell}
+        oncontextmenu="cellMarked(this,${i},${j})"></td>`
         }
         strHTML += '</tr>'
     }
@@ -208,18 +238,27 @@ function firstmove(i, j, board) {
     var elCell = document.querySelector(`.cell-${i}-${j}`)
     if (cell.minesAroundCount === 0) {
         elCell.innerText = EMPTY
-        elCell.classList.add('touch')
+        elCell.classList.add('touched')
         expandShown(i, j, gBoard)
     } else {
         elCell.innerText = cell.minesAroundCount
-        elCell.classList.add('touch')
+        elCell.classList.add('touched')
     }
 }
 function cellClicked(i, j, elCell) {
     var elSmiley = document.querySelector('.smiley')
     elSmiley.innerText = NORMAL
-    if (!gGame.isOn) {
+    if (!gGame.isOn && !gIsManual) {
         firstmove(i, j, gBoard)
+        return
+    }
+    if (gIsManual) {
+        placeMines(i, j, elCell)
+        if (gCountMinesManual === 0) {
+            gIntervalTime = setInterval(stopwatch, 10)
+            var elMinesManualMsgOut = document.querySelector('.manual-msg-out');
+            elMinesManualMsgOut.style.display = 'none';
+        }
         return
     }
     if (gIsHintOn && gLevel.HINTS > 0) {
@@ -236,7 +275,7 @@ function cellClicked(i, j, elCell) {
         cell.isShown = true
         gGame.shownCount++
         elCell.innerText = EMPTY
-        elCell.classList.add('touch')
+        elCell.classList.add('touched')
         expandShown(i, j, gBoard)
     } else if (cell.isMine) {
         cell.isShown = true
@@ -252,7 +291,7 @@ function cellClicked(i, j, elCell) {
         cell.isShown = true
         gGame.shownCount++
         elCell.innerText = cell.minesAroundCount
-        elCell.classList.add('touch')
+        elCell.classList.add('touched')
     }
     checkVictory()
 }
@@ -286,7 +325,7 @@ function cellMarked(elCell, i, j) {
 }
 function checkVictory() {
     if (gIsGameOver) return
-    var totalSize = gLevel.SIZE ** 2//custom
+    var totalSize = gLevel.SIZE.ROWS * gLevel.SIZE.COLS
     if (gGame.markedCount > gLevel.MINES) return
     if ((gGame.shownCount) + (gGame.markedCount) === totalSize) {
         gIsVictory = true
@@ -299,9 +338,8 @@ function checkVictory() {
 }
 
 function checkBestTime() {
-    if (gLevel.SIZE === 4) {
+    if (gLevel.SIZE.ROWS === 4 && gLevel.SIZE.COLS === 4) {
         var bestTime4 = parseInt(localStorage.getItem(`bestTime-level-4`));
-        console.log(bestTime4);
         if (!bestTime4) {
             bestTime4 = Infinity;
         }
@@ -311,7 +349,7 @@ function checkBestTime() {
         }
         localStorage.setItem('bestTime-level-4', bestTime4)
         renderBestTimes()
-    } else if (gLevel.SIZE === 8) {
+    } else if (gLevel.SIZE.ROWS === 8 && gLevel.SIZE.COLS === 8) {
         var bestTime8 = parseInt(localStorage.getItem(`bestTime-level-8`))
         if (!bestTime8) {
             bestTime8 = Infinity
@@ -322,7 +360,7 @@ function checkBestTime() {
         }
         localStorage.setItem('bestTime-level-8', bestTime8)
         renderBestTimes()
-    } else if (gLevel.SIZE === 12) {
+    } else if (gLevel.SIZE.ROWS === 12 && gLevel.SIZE.COLS === 12) {
         var bestTime12 = parseInt(localStorage.getItem(`bestTime-level-12`))
         if (!bestTime12) {
             bestTime12 = Infinity
@@ -338,12 +376,12 @@ function checkBestTime() {
 
 function renderBestTimes() {
     var str = ''
-    if (gLevel.SIZE === 4) {
+    if (gLevel.SIZE.ROWS === 4 && gLevel.SIZE.COLS === 4) {
         var time = localStorage.getItem('bestTime-level-4')
-    } else if (gLevel.SIZE === 8) {
-        var time = localStorage.getItem('bestTime-level-8')
-    } else if (gLevel.SIZE === 12) {
-        var time = localStorage.getItem('bestTime-level-12')
+    } else if (gLevel.SIZE.ROWS === 8 && gLevel.SIZE.COLS === 8) {
+        time = localStorage.getItem('bestTime-level-8')
+    } else if (gLevel.SIZE.ROWS === 12 && gLevel.SIZE.COLS === 12) {
+        time = localStorage.getItem('bestTime-level-12')
     }
     time = parseInt(time)
     var milsecounds = parseInt(time) % 100
@@ -377,13 +415,13 @@ function renderBestTimes() {
     } else {
         str = `${displayMinutes}:${displaySecounds}:${displayMilsecounds}`
     }
-    if (gLevel.SIZE === 4) {
+    if (gLevel.SIZE.ROWS === 4 && gLevel.SIZE.COLS === 4) {
         var elBestTimeLvl4 = document.querySelector('.lvl-4 span');
         elBestTimeLvl4.innerText = ' ' + str
-    } else if (gLevel.SIZE === 8) {
+    } else if (gLevel.SIZE.ROWS === 8 && gLevel.SIZE.COLS === 8) {
         var elBestTimeLvl8 = document.querySelector('.lvl-8 span');
         elBestTimeLvl8.innerText = ' ' + str
-    } else if (gLevel.SIZE === 12) {
+    } else if (gLevel.SIZE.ROWS === 12 && gLevel.SIZE.COLS === 12) {
         var elBestTimeLvl12 = document.querySelector('.lvl-12 span');
         elBestTimeLvl12.innerText = ' ' + str
     }
@@ -436,7 +474,7 @@ function expandShown(cellI, cellJ, board) {
                     cell.isShown = true
                     gGame.shownCount++
                     var elCell = document.querySelector(`.cell-${i}-${j}`)
-                    elCell.classList.add('touch')
+                    elCell.classList.add('touched')
                     elCell.innerText = EMPTY
                     expandShown(i, j, gBoard)
                 } else {
@@ -444,7 +482,7 @@ function expandShown(cellI, cellJ, board) {
                     cell.isShown = true
                     gGame.shownCount++
                     elCell = document.querySelector(`.cell-${i}-${j}`)
-                    elCell.classList.add('touch')
+                    elCell.classList.add('touched')
                     elCell.innerText = cell.minesAroundCount
                 }
             }
@@ -567,51 +605,8 @@ function stopwatch() {
 
 }
 
-
-
-
-//------custom menu----///
-// function createMat(ROWS, COLS) {
-//     var mat = []
-//     for (var i = 0; i < ROWS; i++) {
-//         var row = []
-//         for (var j = 0; j < COLS; j++) {
-//             row.push('')
-//         }
-//         mat.push(row)
-//     }
-//     return mat
-// }
-
-
-///-----undo----///
-// function undo(){
-//     var undo=[]
-// }
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
-
-
-// function renderCell(location, value) {
-//     var cellSelector = '.' + getClassName(location)
-//     var elCell = document.querySelector(cellSelector);
-//     // if (gIsGameOver) {
-//     //     if (elCell.classList.contains('touch')) {
-//     //         elCell.classList.remove('touch')
-//     //     } else {
-//     //         elCell.classList.remove('flag')
-//     //     }
-//     //     elCell.classList.add('bomb')
-//     // }
-//     // elCell.classList.add('touch')
-//     elCell.innerHTML = value;
-// }
-
-// function getClassName(location) {
-//     var cellClass = 'cell-' + location.i + '-' + location.j;
-//     return cellClass;
-// }

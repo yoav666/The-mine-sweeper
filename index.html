@@ -18,12 +18,16 @@
         </div>
         <div class="continer-header2">
             <div class="smiley-out">
-                <div onclick="restartGame(gLevel.SIZE)" class="smiley"></div>
+                <div onclick="restartGame(gLevel.SIZE.ROWS,gLevel.SIZE.COLS)" class="smiley"></div>
             </div>
             <div class="size-out">
-                <div onclick="restartGame(4)" class="size four">4</div>
-                <div onclick="restartGame(8)" class="size eight">8</div>
-                <div onclick="restartGame(12)" class="size twelve">12</div>
+                <div onclick="restartGame(4,4)" class="size four">4</div>
+                <div onclick="restartGame(8,8)" class="size eight">8</div>
+                <div onclick="restartGame(12,12)" class="size twelve">12</div>
+                <div onclick="restartGame(-1,-1)" class="size manual">M</div>
+            </div>
+            <div class="manual-msg-out">
+                <div class="manual-msg">PLACE THE MINES</div>
             </div>
         </div>
         <div class="continer-header3">
@@ -41,7 +45,6 @@
         </div>
         <div class="board-out">
             <table class="table-board">
-                <thead></thead>
                 <tbody class="board"></tbody>
             </table>
         </div>

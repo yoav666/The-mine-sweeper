@@ -99,7 +99,8 @@ body{
 
 }
 .smiley-out{
-    margin-top: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     display: flex;
     justify-content: center;
     width: 100%;
@@ -122,6 +123,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
     border: 1px solid white;
     border-radius: 10px;
     
@@ -142,22 +144,44 @@ body{
     background-color:rgb(37, 37, 37);
 }
 .eight{
-    background:linear-gradient(120deg,violet,rgb(245, 50, 157))
+    background:linear-gradient(120deg,violet,rgb(245, 50, 157));
     /* background-color: violet; */
 }
 .twelve{
+    /* border-top-right-radius: 10px; */
+    /* border-bottom-right-radius: 10px; */
+    background:linear-gradient(120deg,violet,rgb(245, 50, 157));
+    /* color: greenyellow; */
+    /* background-color: rgb(37, 37, 37); */
+}
+.manual{
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     color: greenyellow;
     background-color: rgb(37, 37, 37);
 }
+.manual-msg-out{
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 5px;
+}
+.manual-msg{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 50px;
+    border:1px solid white;
+    background-color:rgb(37, 37, 37);
+    border-radius: 25px;
+    color:greenyellow;
+    font-size: 20px;
+}
 .the-game{
     display: flex;
-    /* min-height: 800px; */
-    /* background-color: violet; */
-    /* justify-content: stretch; */
-    /* align-content: stretch; */
-    /* align-items: stretch; */
 }
 .continer-modal{
     height: 200px;
@@ -242,7 +266,7 @@ body{
     /* background-color: turquoise; */
     background:linear-gradient(120deg,turquoise, lightblue,aqua);
 }
-.touch{
+.touched{
     font-size: 22px;
     font-weight: 500;
     background:linear-gradient(120deg,violet,rgb(245, 50, 157));
