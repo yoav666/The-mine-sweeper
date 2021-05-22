@@ -10,7 +10,6 @@ body{
     width: 100%;
     height: 120px;
     display: flex;
-    /* background-color: antiquewhite; */
 }
 .continer-header1{
     width: 25%;
@@ -35,7 +34,6 @@ body{
     border-radius: 25px;
     background-color:rgb(37, 37, 37);
     color:greenyellow;
-    /* color: rgb(235, 5, 177); */
     font-size: 25px;
 }
 .lives{
@@ -54,7 +52,6 @@ body{
 .continer-header2{
     width: 50%;
     height: 100%;
-    /* background-color: greenyellow; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -67,7 +64,6 @@ body{
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    /* background-color: red; */
 }
 .hints{
     margin: auto;
@@ -80,9 +76,7 @@ body{
     background-color:rgb(37, 37, 37);
     border-radius: 25px;
     color:greenyellow;
-    /* color: rgb(235, 5, 177); */
     font-size: 25px;
-    
 }
 .safe-click{
     margin: auto;
@@ -96,7 +90,6 @@ body{
     border-radius: 25px;
     color:greenyellow;
     font-size: 25px;
-
 }
 .smiley-out{
     margin-top: 5px;
@@ -126,7 +119,6 @@ body{
     flex-wrap: wrap;
     border: 1px solid white;
     border-radius: 10px;
-    
 }
 .size{
     display: flex;
@@ -145,14 +137,9 @@ body{
 }
 .eight{
     background:linear-gradient(120deg,violet,rgb(245, 50, 157));
-    /* background-color: violet; */
 }
 .twelve{
-    /* border-top-right-radius: 10px; */
-    /* border-bottom-right-radius: 10px; */
     background:linear-gradient(120deg,violet,rgb(245, 50, 157));
-    /* color: greenyellow; */
-    /* background-color: rgb(37, 37, 37); */
 }
 .manual{
     border-top-right-radius: 10px;
@@ -185,15 +172,12 @@ body{
 }
 .continer-modal{
     height: 200px;
-    /* background-color: lightyellow; */
 }
 .modal-out{
-    /* position: absolute; */
     display: none;
     justify-content: center;
     align-items: center;
     margin-top: 50px;
-    /* background-color: lightcoral; */
 }
 .modal{
     display: flex;
@@ -201,7 +185,6 @@ body{
     justify-content: center;
     border-radius: 20px;
     border:1px solid white;
-    /* color: violet; */
     color:rgb(245, 50, 157);
     background-color: rgb(37, 37, 37);
     width: 160px;
@@ -211,13 +194,9 @@ body{
 .board-out-left{
     margin-top: 50px;
     width:25%;
-    /* background-color: red; */
 }
-
-
 .board-out{
     width: 50%;
-    /* background-color: lightskyblue;  */
     margin-top: 50px;
     display: flex;
     justify-content: center;
@@ -226,8 +205,6 @@ body{
 .board-out-right{
     margin-top: 50px;
     width:25%;
-    /* max-width: 25%; */
-    /* background-color: red; */
 }
 .best-time-continer{
     margin: auto;
@@ -263,38 +240,41 @@ body{
     width: 60px;
     height: 60px;
     border: 2px solid black;
-    /* background-color: turquoise; */
     background:linear-gradient(120deg,turquoise, lightblue,aqua);
 }
 .touched{
     font-size: 22px;
     font-weight: 500;
     background:linear-gradient(120deg,violet,rgb(245, 50, 157));
-    /* background-color: violet; */
 }
 .bomb{
     font-size: 22px;
     font-weight: 500;
     background:radial-gradient(orange,tomato, red);
-    /* background-color: red; */
 }
 .flag{
     font-size: 22px;
     font-weight: 500;
     background:linear-gradient(30deg,yellow,rgb(255, 115, 0), yellow);
-    /* background-color: yellow; */
 }
 .hintCells{
     font-size: 22px;
     font-weight: 500;
     background:linear-gradient(60deg,greenyellow,green, yellowgreen);
-    /* background-color: greenyellow; */
+}
+.hints{
+    display: flex;
+    flex-direction: row;
+}
+.hints-inside{
+    display: flex;
+    flex-direction: row;
+    font-size: 22px;
 }
 .safe-click-color{
     font-size: 22px;
     font-weight: 500;
     background:linear-gradient(60deg,lightyellow,greenyellow,yellow);
-    /* background-color: lightgoldenrodyellow; */
 }
 .footer{
     margin-top: 100px;
@@ -302,7 +282,6 @@ body{
     justify-content: center;
     align-items: center;
     height: 400px;
-    /* background-color: yellow; */
 }
 .name{
     margin: auto;
@@ -315,6 +294,5 @@ body{
     background-color:rgb(37, 37, 37);
     border-radius: 25px;
     color:greenyellow;
-    /* color: rgb(235, 5, 177); */
     font-size: 25px;
 }
