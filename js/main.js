@@ -44,6 +44,16 @@ var gGame = {
     secsPassed: 0
 };
 
+firstBestTimeRender()
+function firstBestTimeRender() {
+    gLevel.SIZE = 4
+    renderBestTimes()
+    gLevel.SIZE = 8
+    renderBestTimes()
+    gLevel.SIZE = 12
+    renderBestTimes()
+    gLevel.SIZE = 8
+}
 
 function initGame() {
     var elSmiley = document.querySelector('.smiley')
@@ -69,6 +79,7 @@ function initGame() {
     minutes = 0;
 
 }
+
 
 function restartGame(size) {
     gLevel.SIZE = size
@@ -280,7 +291,7 @@ function cellMarked(elCell, i, j) {
 }
 function checkVictory() {
     if (gIsGameOver) return
-    var totalSize = gLevel.SIZE ** 2
+    var totalSize = gLevel.SIZE ** 2//custom
     if (gGame.markedCount > gLevel.MINES) return
     if ((gGame.shownCount) + (gGame.markedCount) === totalSize) {
         gIsVictory = true
@@ -293,7 +304,6 @@ function checkVictory() {
 }
 
 function checkBestTime() {
-
     if (gLevel.SIZE === 4) {
         var bestTimePrv4 = parseInt(localStorage.getItem(`bestTime-level-4`))
     } else if (gLevel.SIZE === 8) {
@@ -342,13 +352,14 @@ function checkBestTime() {
         renderBestTimes()
     }
 }
+
 function renderBestTimes() {
     var str = ''
-    if(gLevel.SIZE === 4){
+    if (gLevel.SIZE === 4) {
         var time = localStorage.getItem('bestTime-level-4')
-    }else if (gLevel.SIZE === 8){
+    } else if (gLevel.SIZE === 8) {
         var time = localStorage.getItem('bestTime-level-8')
-    }else if (gLevel.SIZE === 12){
+    } else if (gLevel.SIZE === 12) {
         var time = localStorage.getItem('bestTime-level-12')
     }
     time = parseInt(time)
@@ -390,7 +401,7 @@ function renderBestTimes() {
     } else if (gLevel.SIZE === 12) {
         var elBestTimeLvl12 = document.querySelector('.lvl-12 span');
         elBestTimeLvl12.innerText = ' ' + str
-    }//else custom
+    } 
 }
 function checkGameOver() {
     if (gLevel.LIVES === 0) {
@@ -480,13 +491,8 @@ function getHint(cellI, cellJ, board) {
             var cell = board[i][j]
             if (!cell.isShown && !cell.isMarked) {
                 var elCell = document.querySelector(`.cell-${i}-${j}`)
-                if (cell.isMine) {
-                    elCell.innerText = MINE
-                    elCell.classList.add('hintCells')
-                } else {
-                    elCell.innerText = cell.minesAroundCount
-                    elCell.classList.add('hintCells')
-                }
+                elCell.classList.add('hintCells')
+                elCell.innerText = (cell.isMine) ? MINE : cell.minesAroundCount
                 clearHint()
             }
         }
