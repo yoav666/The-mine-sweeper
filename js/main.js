@@ -305,49 +305,37 @@ function checkVictory() {
 
 function checkBestTime() {
     if (gLevel.SIZE === 4) {
-        var bestTimePrv4 = parseInt(localStorage.getItem(`bestTime-level-4`))
-    } else if (gLevel.SIZE === 8) {
-        var bestTimePrv8 = parseInt(localStorage.getItem(`bestTime-level-8`))
-    } else if (gLevel.SIZE === 12) {
-        var bestTimePrv12 = parseInt(localStorage.getItem(`bestTime-level-12`))
-    }
-
-    if (!bestTimePrv4) {
-        bestTimePrv4 = Infinity
-    }
-    if (!bestTimePrv8) {
-        bestTimePrv8 = Infinity
-    }
-    if (!bestTimePrv12) {
-        bestTimePrv12 = Infinity
-    }
-    if (gLevel.SIZE === 4) {
-        var timeThisGame4 = gSumTime
-    } else if (gLevel.SIZE === 8) {
-        var timeThisGame8 = gSumTime
-    } else if (gLevel.SIZE === 12) {
-        var timeThisGame12 = gSumTime
-    }
-    if (gLevel.SIZE === 4) {
+        var bestTimePrv4 = parseInt(localStorage.getItem(`bestTime-level-4`));
+        console.log(bestTimePrv4);
+        if (!bestTimePrv4) {
+            bestTimePrv4 = 1111111111111;
+        }
+        var timeThisGame4 = gSumTime;
         if (timeThisGame4 < bestTimePrv4) {
-            gBestTime4 = timeThisGame4
+            gBestTime4 = timeThisGame4;
         }
-    } else if (gLevel.SIZE === 8) {
-        if (timeThisGame8 < bestTimePrv8) {
-            gBestTime8 = timeThisGame8
-        }
-    } else if (gLevel.SIZE === 12) {
-        if (timeThisGame12 < bestTimePrv12) {
-            gBestTime12 = timeThisGame12
-        }
-    }
-    if (gLevel.SIZE === 4) {
         localStorage.setItem('bestTime-level-4', gBestTime4)
         renderBestTimes()
     } else if (gLevel.SIZE === 8) {
+        var bestTimePrv8 = parseInt(localStorage.getItem(`bestTime-level-8`))
+        if (!bestTimePrv8) {
+            bestTimePrv8 = Infinity
+        }
+        var timeThisGame8 = gSumTime
+        if (timeThisGame8 < bestTimePrv8) {
+            gBestTime8 = timeThisGame8
+        }
         localStorage.setItem('bestTime-level-8', gBestTime8)
         renderBestTimes()
     } else if (gLevel.SIZE === 12) {
+        var bestTimePrv12 = parseInt(localStorage.getItem(`bestTime-level-12`))
+        if (!bestTimePrv12) {
+            bestTimePrv12 = Infinity
+        }
+        var timeThisGame12 = gSumTime
+        if (timeThisGame12 < bestTimePrv12) {
+            gBestTime12 = timeThisGame12
+        }
         localStorage.setItem('bestTime-level-12', gBestTime12)
         renderBestTimes()
     }
@@ -387,7 +375,9 @@ function renderBestTimes() {
     var displayMilsecounds = (milsecounds < 10) ? '0' + milsecounds.toString() : milsecounds;
     var displaySecounds = (secounds < 10) ? '0' + secounds.toString() : secounds;
     var displayMinutes = (minutes < 10) ? '0' + minutes.toString() : minutes;
-    if (!minutes) {
+    if (!secounds) {
+        str = `${displayMilsecounds}`
+    } else if (!minutes) {
         str = `${displaySecounds}:${displayMilsecounds}`
     } else {
         str = `${displayMinutes}:${displaySecounds}:${displayMilsecounds}`
@@ -401,7 +391,7 @@ function renderBestTimes() {
     } else if (gLevel.SIZE === 12) {
         var elBestTimeLvl12 = document.querySelector('.lvl-12 span');
         elBestTimeLvl12.innerText = ' ' + str
-    } 
+    }
 }
 function checkGameOver() {
     if (gLevel.LIVES === 0) {
