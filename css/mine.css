@@ -170,6 +170,10 @@ body{
 .the-game{
     display: flex;
 }
+.board-out-left{
+    margin-top: 50px;
+    width:25%;
+}
 .continer-modal{
     height: 200px;
 }
@@ -191,9 +195,21 @@ body{
     height: 80px;
     font-size: 30px;
 }
-.board-out-left{
-    margin-top: 50px;
-    width:25%;
+.undo{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 50px;
+    border:1px solid white;
+    background-color:rgb(37, 37, 37);
+    border-radius: 25px;
+    color:greenyellow;
+    font-size: 25px;
+    /* width: 40px;
+    height: 40px;
+    background-color: rgb(37, 37, 37); */
 }
 .board-out{
     width: 50%;
