@@ -8,8 +8,9 @@ body{
 }
 .header{
     width: 100%;
-    height: 150px;
+    height: 120px;
     display: flex;
+    /* background-color: antiquewhite; */
 }
 .continer-header1{
     width: 25%;
@@ -18,6 +19,10 @@ body{
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+}
+.stop-watch{
+    margin: 10px;
+    width: 100%;
 }
 .timer{
     margin: auto;
@@ -94,7 +99,7 @@ body{
 
 }
 .smiley-out{
-    margin-top: 30px;
+    margin-top: 10px;
     display: flex;
     justify-content: center;
     width: 100%;
@@ -146,6 +151,14 @@ body{
     color: greenyellow;
     background-color: rgb(37, 37, 37);
 }
+.the-game{
+    display: flex;
+    /* min-height: 800px; */
+    /* background-color: violet; */
+    /* justify-content: stretch; */
+    /* align-content: stretch; */
+    /* align-items: stretch; */
+}
 .continer-modal{
     height: 200px;
     /* background-color: lightyellow; */
@@ -171,17 +184,59 @@ body{
     height: 80px;
     font-size: 30px;
 }
+.board-out-left{
+    margin-top: 50px;
+    width:25%;
+    /* background-color: red; */
+}
 
 
 .board-out{
-    /* width: 600px;
-    height: 600px;
-    background-color: lightskyblue; */
-    margin: 50px;
-    /* position: absolute; */
+    width: 50%;
+    /* background-color: lightskyblue;  */
+    margin-top: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.board-out-right{
+    margin-top: 50px;
+    width:25%;
+    /* max-width: 25%; */
+    /* background-color: red; */
+}
+.best-time-continer{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 200px;
+    height: 250px;
+    border:1px solid white;
+    background-color:rgb(37, 37, 37);
+    border-radius: 25px;
+    font-size: 25px;
+    color:greenyellow;
+}
+.best-time{
+    margin: 10px;
+    /* width: 110px; */
+    /* width: 100%; */
+    /* background-color: violet; */
+    /* color:greenyellow; */
+}
+.lvl-4{
+    font-size: 16px;
+    width: 100%;
+}
+.lvl-8{
+    width: 100%;
+    font-size: 16px;
+}
+.lvl-12{
+    width: 100%;
+    font-size: 16px;
 }
 
 .cell{
@@ -223,9 +278,12 @@ body{
     /* background-color: lightgoldenrodyellow; */
 }
 .footer{
+    margin-top: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 400px;
+    /* background-color: yellow; */
 }
 .name{
     margin: auto;
