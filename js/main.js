@@ -13,12 +13,7 @@ const SAFECLICK = '✔'
 
 document.oncontextmenu = rightClick;///need to make it better
 // var gisMarkedGoodOrBad = false
-var gBestTime4 = Infinity;
-var gBestTime8 = Infinity;
-var gBestTime12 = Infinity;
 var gSumTime = 0
-var gSumTime2 = '';
-
 var milsecounds = 0;
 var secounds = 0;
 var minutes = 0;
@@ -305,38 +300,38 @@ function checkVictory() {
 
 function checkBestTime() {
     if (gLevel.SIZE === 4) {
-        var bestTimePrv4 = parseInt(localStorage.getItem(`bestTime-level-4`));
-        console.log(bestTimePrv4);
-        if (!bestTimePrv4) {
-            bestTimePrv4 = 1111111111111;
+        var bestTime4 = parseInt(localStorage.getItem(`bestTime-level-4`));
+        console.log(bestTime4);
+        if (!bestTime4) {
+            bestTime4 = Infinity;
         }
         var timeThisGame4 = gSumTime;
-        if (timeThisGame4 < bestTimePrv4) {
-            gBestTime4 = timeThisGame4;
+        if (timeThisGame4 < bestTime4) {
+            bestTime4 = timeThisGame4;
         }
-        localStorage.setItem('bestTime-level-4', gBestTime4)
+        localStorage.setItem('bestTime-level-4', bestTime4)
         renderBestTimes()
     } else if (gLevel.SIZE === 8) {
-        var bestTimePrv8 = parseInt(localStorage.getItem(`bestTime-level-8`))
-        if (!bestTimePrv8) {
-            bestTimePrv8 = Infinity
+        var bestTime8 = parseInt(localStorage.getItem(`bestTime-level-8`))
+        if (!bestTime8) {
+            bestTime8 = Infinity
         }
         var timeThisGame8 = gSumTime
-        if (timeThisGame8 < bestTimePrv8) {
-            gBestTime8 = timeThisGame8
+        if (timeThisGame8 < bestTime8) {
+            bestTime8 = timeThisGame8
         }
-        localStorage.setItem('bestTime-level-8', gBestTime8)
+        localStorage.setItem('bestTime-level-8', bestTime8)
         renderBestTimes()
     } else if (gLevel.SIZE === 12) {
-        var bestTimePrv12 = parseInt(localStorage.getItem(`bestTime-level-12`))
-        if (!bestTimePrv12) {
-            bestTimePrv12 = Infinity
+        var bestTime12 = parseInt(localStorage.getItem(`bestTime-level-12`))
+        if (!bestTime12) {
+            bestTime12 = Infinity
         }
         var timeThisGame12 = gSumTime
-        if (timeThisGame12 < bestTimePrv12) {
-            gBestTime12 = timeThisGame12
+        if (timeThisGame12 < bestTime12) {
+            bestTime12 = timeThisGame12
         }
-        localStorage.setItem('bestTime-level-12', gBestTime12)
+        localStorage.setItem('bestTime-level-12', bestTime12)
         renderBestTimes()
     }
 }
@@ -468,9 +463,6 @@ function hintClicked() {
         var elHintOn = document.querySelector('.hints span')
         elHintOn.innerText = HINTISON
         gIsHintOn = true
-    } else {
-        console.log('game is not playing or u dont have hints anymore')
-        return
     }
 }
 function getHint(cellI, cellJ, board) {
@@ -570,7 +562,6 @@ function stopwatch() {
     var displaySecounds = (secounds < 10) ? '0' + secounds.toString() : secounds;
     var displayMinutes = (minutes < 10) ? '0' + minutes.toString() : minutes;
     gSumTime = minutes * 60 * 100 + secounds * 100 + milsecounds
-    gSumTime2 = displayMinutes + ':' + displaySecounds + ':' + displayMilsecounds;
     var elTime = document.querySelector('.timer')
     elTime.innerText = displayMinutes + ":" + displaySecounds + ":" + displayMilsecounds;
 
